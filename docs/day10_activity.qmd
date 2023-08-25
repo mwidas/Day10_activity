@@ -54,5 +54,5 @@ ggplot(data = mean_air_temp, aes(x = year4, y = mean_air_temp)) +
 ```
 
 ```{r}
-left_join(mean_ice_duration_yr, mean_air_temp )
+mean_ice_join <- left_join(mean_ice_duration_yr, mean_air_temp )
 ```
