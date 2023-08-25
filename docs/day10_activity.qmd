@@ -1,0 +1,58 @@
+---
+title: "day10"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+```{r}
+madison_meteorological <- read_csv(here("data", "ntl20_v6.csv"))
+```
+
+```{r}
+madison_lake_ice <- read_csv(here("data", "ntl33_v7.csv"), na = c("-999"))
+```
+
+```{r}
+ice_duration_comparison <- madison_lake_ice %>% 
+  group_by(lakeid) %>% 
+  ggplot(aes(x = lakeid, y = ice_duration)) +
+  geom_jitter()
+
+ice_duration_comparison
+```
+
+```{r}
+mean_ice_duration_yr <- madison_lake_ice %>% 
+  group_by(year4) %>% 
+  summarize(mean_ice_duration = mean(ice_duration))
+
+mean_ice_duration_yr
+```
+
+```{r}
+ggplot(data = mean_ice_duration_yr, aes(x = year4, y = mean_ice_duration)) +
+  geom_point()
+```
+
+```{r}
+mean_air_temp <- madison_meteorological %>% 
+  group_by(year4) %>% 
+  filter(month %in% c("12", "1", "2")) %>% 
+  summarize(mean_air_temp = mean(ave_air_temp_adjusted))
+
+mean_air_temp
+```
+
+```{r}
+ggplot(data = mean_air_temp, aes(x = year4, y = mean_air_temp)) +
+  geom_point()
+```
+
+```{r}
+left_join(mean_ice_duration_yr, mean_air_temp )
+```
